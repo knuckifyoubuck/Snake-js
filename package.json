@@ -1,0 +1,15 @@
+{
+  "name": "snakegame",
+  "version": "1.0.0",
+  "description": "Snake game on HTML/CSS and pure JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "liveserver": "live-server"
+  },
+  "author": "Grigory Shch",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.9.0"
+  }
+}

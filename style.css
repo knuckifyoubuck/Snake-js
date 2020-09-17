@@ -1,0 +1,33 @@
+body {
+    box-sizing: border-box;
+    width: 504px;
+    font-family: Tahoma, Geneva, sans-serif;
+}
+
+.header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+h1 {
+    margin: 0.2em;
+}
+
+#score {
+    font-size: 1.5em;
+}
+
+#play {
+    width: 20%;
+    font-size: 1.2em;
+}
+
+#game-canvas {
+    border: 2px solid black;
+}
