@@ -8,6 +8,7 @@ const cell = 25;
 
 let state = {
     gameover: true,
+    pause: false,
     direction: 2,
     snake: [
         {x: 250, y: 200, direction: 2},
@@ -21,9 +22,9 @@ let state = {
 
 function drawBoard() {
     for(let row = 0; row < 20; row++) {
-        for(let i = 0; i < 20; i++) { 
-            row % 2 === i % 2 ? ctx.fillStyle = "green" : ctx.fillStyle = "forestgreen";
-            ctx.fillRect(0 + cell * row, 0 + cell * i, cell, cell); 
+        for(let column = 0; column < 20; column++) { 
+            row % 2 === column % 2 ? ctx.fillStyle = "green" : ctx.fillStyle = "forestgreen";
+            ctx.fillRect(0 + cell * row, 0 + cell * column, cell, cell); 
         } 
     }
 }
@@ -142,20 +143,29 @@ function moveSnake() {
 
 let start = 0;
 function draw(timestamp) {
-    start++;
-    if (timestamp - start > 1000/ 10) {
-        if (checkGameOver()){
-            state.gameover = true;
-            return;
+    if(!state.pause) {
+        start++;
+        if (timestamp - start > 1000/ 10) {
+            if (checkGameOver()){
+                state.gameover = true;
+                return;
+            }
+            moveSnake();
+            drawBoard();
+            drawFood(ctx, state.food.x, state.food.y);
+            drawSnake();
+            eatFood();
+            start = timestamp;
         }
-        moveSnake();
-        drawBoard();
-        drawFood(ctx, state.food.x, state.food.y);
-        drawSnake();
-        eatFood();
-        start = timestamp;
-    }
         if(!state.gameover) window.requestAnimationFrame(draw);
+    } 
+    else {
+        window.requestAnimationFrame(draw);
+        ctx.fillStyle = "black";
+        ctx.font = "2.5em sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Pause", 500/2, 500/2); 
+    }
 }
 
 function checkGameOver() {
@@ -167,10 +177,6 @@ function checkGameOver() {
 }
 
 document.addEventListener("keydown", event => {
-    if (!/Arrow/gi.test(event.key)) return;
-    
-    event.preventDefault();
-
     let direction = 0;
     switch (event.key) {
         case "ArrowDown":
@@ -184,8 +190,14 @@ document.addEventListener("keydown", event => {
             break;
         case "ArrowRight":
             direction = 2;
-            break;      
+            break;     
     }
+
+    switch(event.code){
+        case "KeyP": //p
+          enablePause();
+          break;
+      }
 
     if (
         direction && 
@@ -200,6 +212,7 @@ button.onclick = function() {
     if (state.gameover) {
         state = {
             gameover: false, 
+            pause: false,
             direction: 2,
             snake: [
                 {x: 200, y: 200, direction: 2},
@@ -213,4 +226,8 @@ button.onclick = function() {
         generateFood();
         window.requestAnimationFrame(draw);
     }
+}
+
+function enablePause() {
+    state.pause = state.pause ? false : true;
 }
